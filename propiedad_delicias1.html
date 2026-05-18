@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa en Country Las Delicias — MNC Inmuebles</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--blue:#5BB8E8;--blue-dark:#2B7FC4;--bg-dark:#2C3E52;--bg-light:#F4F7FA;--bg-white:#FFFFFF;--text-dark:#1A2535;--text-gray:#556070;--text-muted:#9BB0C8;--border:#B8CCDF;--border-light:#D4DCE8;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--bg-light);color:var(--text-dark);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-dark);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:68px;box-shadow:0 2px 20px rgba(0,0,0,0.2);}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-logo-text{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
+.nav-links{display:flex;align-items:center;gap:6px;list-style:none;}
+.nav-links a{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);text-decoration:none;padding:8px 14px;border-radius:3px;transition:color 0.2s,background 0.2s;}
+.nav-links a:hover{color:var(--blue);background:rgba(91,184,232,0.08);}
+.nav-cta{background:#2B7FC4!important;color:#fff!important;padding:8px 20px!important;border-radius:3px;font-weight:700!important;}
+.breadcrumb{margin-top:68px;background:#fff;border-bottom:1px solid var(--border-light);padding:12px 60px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-gray);}
+.breadcrumb a{color:var(--blue-dark);text-decoration:none;font-weight:600;}
+.breadcrumb span{color:#ccc;}
+.gallery-hero{width:100%;background:var(--bg-dark);}
+.gallery-main-wrap{position:relative;height:520px;cursor:pointer;overflow:hidden;}
+.gallery-main-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
+.gallery-main-wrap:hover img{transform:scale(1.02);}
+.gallery-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(0,0,0,0.45) 100%);pointer-events:none;}
+.gallery-count{position:absolute;bottom:18px;right:18px;background:rgba(0,0,0,0.65);color:#fff;font-size:13px;font-weight:700;padding:7px 16px;border-radius:20px;display:flex;align-items:center;gap:7px;cursor:pointer;transition:background 0.2s;}
+.gallery-count:hover{background:rgba(43,127,196,0.85);}
+.gallery-label{position:absolute;bottom:18px;left:18px;background:rgba(0,0,0,0.55);color:#fff;font-size:12px;font-weight:600;padding:5px 14px;border-radius:3px;}
+.gallery-thumbs{display:flex;gap:3px;height:110px;overflow:hidden;}
+.gallery-thumb{flex:1;min-width:0;overflow:hidden;cursor:pointer;position:relative;transition:opacity 0.2s;}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s;}
+.gallery-thumb:hover img{transform:scale(1.06);}
+.gallery-thumb:hover{opacity:0.85;}
+.gallery-thumb.active::after{content:'';position:absolute;inset:0;border:3px solid var(--blue-dark);}
+.lightbox{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.93);align-items:center;justify-content:center;flex-direction:column;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:90vw;max-height:80vh;object-fit:contain;border-radius:3px;}
+.lightbox-close{position:fixed;top:20px;right:28px;color:#fff;font-size:38px;cursor:pointer;line-height:1;z-index:10;}
+.lightbox-close:hover{color:var(--blue);}
+.lightbox-prev,.lightbox-next{position:fixed;top:50%;transform:translateY(-50%);color:#fff;font-size:30px;cursor:pointer;background:rgba(255,255,255,0.12);border:none;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.lightbox-prev{left:16px;}.lightbox-next{right:16px;}
+.lightbox-prev:hover,.lightbox-next:hover{background:rgba(43,127,196,0.4);}
+.lightbox-caption{color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;margin-top:12px;letter-spacing:1px;text-transform:uppercase;}
+.lightbox-counter{color:rgba(255,255,255,0.4);font-size:12px;margin-top:4px;}
+.main{max-width:1280px;margin:0 auto;padding:36px 60px 80px;display:flex;gap:36px;align-items:flex-start;}
+.left{flex:1;min-width:0;}
+.right{width:340px;flex-shrink:0;position:sticky;top:88px;display:flex;flex-direction:column;gap:16px;}
+.prop-badges{display:flex;gap:8px;margin-bottom:12px;}
+.badge{background:#2B7FC4;color:#fff;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:2px;}
+.badge-tipo{background:rgba(43,127,196,0.12);color:var(--blue-dark);}
+.prop-title{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:900;text-transform:uppercase;color:var(--text-dark);letter-spacing:-1px;line-height:1;margin-bottom:8px;}
+.prop-location{font-size:14px;color:var(--text-gray);display:flex;align-items:center;gap:5px;margin-bottom:16px;}
+.prop-price-big{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:900;color:var(--blue-dark);margin-bottom:24px;}
+.prop-features-row{display:flex;gap:0;margin-bottom:28px;border:1px solid var(--border-light);border-radius:8px;overflow:hidden;background:#fff;}
+.prop-feature{flex:1;padding:16px 12px;text-align:center;border-right:1px solid var(--border-light);display:flex;flex-direction:column;gap:4px;align-items:center;}
+.prop-feature:last-child{border-right:none;}
+.feat-val{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--blue-dark);line-height:1;}
+.feat-lbl{font-size:11px;font-weight:600;color:var(--text-gray);text-transform:uppercase;letter-spacing:1px;}
+.section-block{background:#fff;border-radius:8px;border:1px solid var(--border-light);padding:28px;margin-bottom:20px;}
+.block-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;color:var(--text-dark);padding-bottom:10px;border-bottom:2px solid var(--blue);display:inline-block;margin-bottom:16px;}
+.desc-text{font-size:15px;color:var(--text-gray);line-height:1.85;}
+.desc-text strong{color:var(--text-dark);}
+.amenities-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.amenity{background:rgba(43,127,196,0.08);border:1px solid rgba(43,127,196,0.2);color:var(--blue-dark);font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;}
+.map-container{border-radius:8px;overflow:hidden;height:320px;border:1px solid var(--border-light);}
+.map-placeholder{text-align:center;color:var(--text-muted);padding:20px;}
+.map-placeholder a{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:12px;font-weight:700;color:var(--blue-dark);text-decoration:none;background:rgba(43,127,196,0.1);padding:8px 16px;border-radius:3px;}
+.price-card{background:#fff;border-radius:8px;border:1px solid var(--border-light);padding:24px;border-top:3px solid var(--blue-dark);}
+.price-card-price{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;color:var(--blue-dark);margin-bottom:4px;}
+.price-card-sub{font-size:13px;color:var(--text-gray);margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border-light);}
+.contact-card-title{font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.form-group input,.form-group textarea{background:var(--bg-light);border:1px solid var(--border-light);border-radius:5px;padding:9px 12px;font-family:'Barlow',sans-serif;font-size:13px;color:var(--text-dark);outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,184,232,0.15);}
+.form-group textarea{resize:vertical;min-height:70px;}
+.btn-consulta{width:100%;background:#2B7FC4;color:#fff;border:none;border-radius:5px;padding:12px;font-family:'Barlow',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background 0.2s,transform 0.15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;}
+.btn-consulta:hover{background:var(--blue);transform:translateY(-1px);}
+.btn-whatsapp{width:100%;background:#25D366;color:#fff;border:none;border-radius:5px;padding:11px;font-family:'Barlow',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background 0.2s,transform 0.15s;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;}
+.btn-whatsapp:hover{background:#1ebe5b;transform:translateY(-1px);}
+.agent-info{margin-top:14px;padding-top:14px;border-top:1px solid var(--border-light);display:flex;align-items:center;gap:10px;}
+.agent-avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-dark);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;}
+.agent-name{font-size:13px;font-weight:700;color:var(--text-dark);}
+.agent-role{font-size:11px;color:var(--text-muted);}
+footer{background:var(--bg-dark);border-top:1px solid rgba(255,255,255,0.08);padding:28px 60px;display:flex;align-items:center;justify-content:space-between;}
+.footer-copy{font-size:12px;color:var(--text-muted);}
+.footer-mat{font-size:12px;color:rgba(255,255,255,0.5);font-style:italic;}
+@media(max-width:900px){nav{padding:0 20px;}.nav-links{display:none;}.breadcrumb{padding:12px 20px;}.gallery-main-wrap{height:260px;}.gallery-thumbs{height:70px;}.main{flex-direction:column;padding:20px 16px 60px;}.right{width:100%;position:static;}.prop-title{font-size:28px;}footer{flex-direction:column;gap:12px;text-align:center;padding:24px 20px;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="mnc_web.html" class="nav-logo">
+    <svg viewBox="0 0 80 76" width="46" fill="none"><polyline points="6,43 40,7 74,43" stroke="#5BB8E8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="18,51 40,30 62,51" stroke="#2B7FC4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="18,51 18,68 62,68 62,51" stroke="#2B7FC4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <div style="display:flex;flex-direction:column;gap:2px;line-height:1;"><span style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;">MNC</span><span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:3px;">Inmuebles</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="mnc_web.html#inicio">Inicio</a></li>
+    <li><a href="propiedades.html">Propiedades</a></li>
+    <li><a href="mnc_web.html#servicios">Servicios</a></li>
+    <li><a href="mnc_web.html#nosotros">Nosotros</a></li>
+    <li><a href="mnc_web.html#contacto" class="nav-cta">Contacto</a></li>
+  </ul>
+</nav>
+<div class="breadcrumb">
+  <a href="mnc_web.html">Inicio</a><span>›</span>
+  <a href="propiedades.html">Propiedades</a><span>›</span>
+  Casa en Country Las Delicias
+</div>
+<div class="gallery-hero">
+  <div class="gallery-main-wrap" onclick="openLightbox(0)">
+    <img id="main-img" src="img/delicias1/foto1.jpeg" alt="Living"/>
+    <div class="gallery-overlay"></div>
+    <div class="gallery-label" id="main-label">Living</div>
+    <div class="gallery-count">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Ver las 16 fotos
+    </div>
+  </div>
+  <div class="gallery-thumbs">
+    <div class="gallery-thumb active" onclick="changeMain(0)"><img src="img/delicias1/foto1.jpeg" alt="Living"/></div>
+    <div class="gallery-thumb" onclick="changeMain(1)"><img src="img/delicias1/foto2.jpeg" alt="Living"/></div>
+    <div class="gallery-thumb" onclick="changeMain(2)"><img src="img/delicias1/foto3.jpeg" alt="Galería"/></div>
+    <div class="gallery-thumb" onclick="changeMain(3)"><img src="img/delicias1/foto4.jpeg" alt="Comedor"/></div>
+    <div class="gallery-thumb" onclick="changeMain(4)"><img src="img/delicias1/foto5.jpeg" alt="Comedor"/></div>
+    <div class="gallery-thumb" onclick="changeMain(5)"><img src="img/delicias1/foto6.jpeg" alt="Cocina"/></div>
+    <div class="gallery-thumb" onclick="changeMain(6)"><img src="img/delicias1/foto7.jpeg" alt="Cocina"/></div>
+    <div class="gallery-thumb" onclick="changeMain(7)"><img src="img/delicias1/foto8.jpeg" alt="Estudio"/></div>
+    <div class="gallery-thumb" onclick="changeMain(8)"><img src="img/delicias1/foto9.jpeg" alt="Estudio"/></div>
+    <div class="gallery-thumb" onclick="changeMain(9)"><img src="img/delicias1/foto10.jpeg" alt="Pasillo"/></div>
+    <div class="gallery-thumb" onclick="changeMain(10)"><img src="img/delicias1/foto11.jpeg" alt="Playroom"/></div>
+    <div class="gallery-thumb" onclick="changeMain(11)"><img src="img/delicias1/foto12.jpeg" alt="Playroom"/></div>
+    <div class="gallery-thumb" onclick="changeMain(12)"><img src="img/delicias1/foto13.jpeg" alt="Patio"/></div>
+    <div class="gallery-thumb" onclick="changeMain(13)"><img src="img/delicias1/foto14.jpeg" alt="Deck"/></div>
+    <div class="gallery-thumb" onclick="changeMain(14)"><img src="img/delicias1/foto15.jpeg" alt="Patio"/></div>
+    <div class="gallery-thumb" onclick="changeMain(15)"><img src="img/delicias1/foto16.jpeg" alt="Quincho"/></div>
+  </div>
+</div>
+</div>
+<div class="main">
+  <div class="left">
+    <div style="margin-bottom:24px;">
+      <div class="prop-badges"><span class="badge">Venta</span><span class="badge badge-tipo">Casa</span></div>
+      <h1 class="prop-title">Casa en Country Las Delicias</h1>
+      <div class="prop-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Country Las Delicias, Córdoba</div>
+      <div class="prop-price-big">USD 650.000</div>
+      <div class="prop-features-row">
+        <div class="prop-feature"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B7FC4" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><div class="feat-val">630</div><div class="feat-lbl">m² totales</div></div>
+        <div class="prop-feature"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B7FC4" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="feat-val">5</div><div class="feat-lbl">Dormitorios</div></div>
+        <div class="prop-feature"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B7FC4" stroke-width="2"><path d="M4 12h16M4 12a2 2 0 0 1-2-2V6h20v4a2 2 0 0 1-2 2M6 12v6M18 12v6"/></svg><div class="feat-val">6</div><div class="feat-lbl">Baños</div></div>
+        <div class="prop-feature"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B7FC4" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><div class="feat-val">1800</div><div class="feat-lbl">m² terreno</div></div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="block-title">Descripción</div>
+      <p class="desc-text">
+        Hermosa propiedad desarrollada en 3 plantas.<br><br>
+        Cuenta con 4 dormitorios, 1 de ellos en suite con vestidor en planta alta.<br><br>
+        En Planta Baja se encuentra el living, baño de recepción, comedor, cocina, galería, escritorio y playroom.<br><br>
+        En Subsuelo cuenta con lavadero, tender y dependencia de servicio.<br><br>
+        Tiene un gran parque con pileta y un amplio quincho con 2 habitaciones, cocina y baño.<br><br>
+        La propiedad es de excelente calidad y diseño con pisos de mármol y madera.
+      </p>
+    </div>
+    <div class="section-block">
+      <div class="block-title">Características</div>
+      <div class="amenities-grid">
+        <span class="amenity">🏊 Pileta</span><span class="amenity">🌳 Gran parque</span>
+        <span class="amenity">🔥 Quincho completo</span><span class="amenity">🛁 Suite con vestidor</span>
+        <span class="amenity">🍳 Cocina equipada</span><span class="amenity">📚 Escritorio / Estudio</span>
+        <span class="amenity">🎮 Playroom</span><span class="amenity">🧺 Lavadero y tender</span>
+        <span class="amenity">🏠 Dependencia de servicio</span><span class="amenity">🪵 Pisos de madera y mármol</span>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="block-title">Ubicación</div>
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps?q=Country+Las+Delicias,+Cordoba,+Argentina&output=embed"
+          width="100%" height="320" style="border:0;display:block;" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Ubicación Country Las Delicias">
+        </iframe>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="price-card">
+      <div class="prop-badges" style="margin-bottom:8px;"><span class="badge">Venta</span><span class="badge badge-tipo">Casa</span></div>
+      <div class="price-card-price">USD 650.000</div>
+      <div class="price-card-sub">Country Las Delicias · 630 m² · 5 dorm.</div>
+      <div class="contact-card-title">Consultar esta propiedad</div>
+      <form id="consulta-form" method="POST">
+        <input type="hidden" name="access_key" value="d5bf9709-c1eb-45dc-a027-81f7f429cb25">
+        <input type="hidden" name="subject" value="Consulta sobre Casa en Country Las Delicias">
+        <input type="hidden" name="from_name" value="Web MNC Inmuebles">
+        <input type="hidden" name="url_propiedad" id="url-propiedad" value="">
+        <div class="form-group"><input type="text" name="nombre" placeholder="Tu nombre" required></div>
+        <div class="form-group"><input type="tel" name="telefono" placeholder="Tu teléfono"></div>
+        <div class="form-group"><input type="email" name="email" placeholder="Tu email"></div>
+        <div class="form-group"><textarea name="mensaje" placeholder="Me interesa esta propiedad, ¿podemos coordinar una visita?"></textarea></div>
+        <div id="consulta-msg" style="display:none;padding:10px 14px;border-radius:5px;font-size:13px;font-weight:600;margin-bottom:8px;border:1px solid;"></div>
+        <button type="submit" class="btn-consulta" id="consulta-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>Enviar consulta</span></button>
+      </form>
+      <a class="btn-whatsapp" id="wa-btn" href="#" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Consultar por WhatsApp
+      </a>
+      <div class="agent-info">
+        <div class="agent-avatar">MA</div>
+        <div><div class="agent-name">María Amelia San Pedro</div><div class="agent-role">Agente · CPI 7291</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="lightbox" id="lightbox" onclick="closeLightboxBg(event)">
+  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+  <button class="lightbox-prev" onclick="lightboxNav(-1)">&#8249;</button>
+  <img id="lightbox-img" src="" alt=""/>
+  <button class="lightbox-next" onclick="lightboxNav(1)">&#8250;</button>
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+  <div class="lightbox-counter" id="lightbox-counter"></div>
+</div>
+<footer>
+  <a href="mnc_web.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <svg viewBox="0 0 80 76" width="38" fill="none"><polyline points="6,43 40,7 74,43" stroke="#5BB8E8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="18,51 40,30 62,51" stroke="#2B7FC4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="18,51 18,68 62,68 62,51" stroke="#2B7FC4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">MNC Inmuebles</span>
+  </a>
+  <div class="footer-copy">© 2026 MNC Inmuebles · Todos los derechos reservados</div>
+  <div class="footer-mat">María Amelia San Pedro · CPI 7291</div>
+</footer>
+<script>
+const photos=[{src:"img/delicias1/foto1.jpeg",label:"Living"},{src:"img/delicias1/foto2.jpeg",label:"Living"},{src:"img/delicias1/foto3.jpeg",label:"Galería"},{src:"img/delicias1/foto4.jpeg",label:"Comedor"},{src:"img/delicias1/foto5.jpeg",label:"Comedor"},{src:"img/delicias1/foto6.jpeg",label:"Cocina"},{src:"img/delicias1/foto7.jpeg",label:"Cocina"},{src:"img/delicias1/foto8.jpeg",label:"Estudio"},{src:"img/delicias1/foto9.jpeg",label:"Estudio"},{src:"img/delicias1/foto10.jpeg",label:"Pasillo"},{src:"img/delicias1/foto11.jpeg",label:"Playroom"},{src:"img/delicias1/foto12.jpeg",label:"Playroom"},{src:"img/delicias1/foto13.jpeg",label:"Patio"},{src:"img/delicias1/foto14.jpeg",label:"Deck"},{src:"img/delicias1/foto15.jpeg",label:"Patio"},{src:"img/delicias1/foto16.jpeg",label:"Quincho"}];
+let current=0;
+function changeMain(idx){current=idx;document.getElementById("main-img").src=photos[idx].src;document.getElementById("main-label").textContent=photos[idx].label;document.querySelectorAll(".gallery-thumb").forEach((t,i)=>t.classList.toggle("active",i===idx));}
+function openLightbox(idx){current=idx;document.getElementById("lightbox-img").src=photos[idx].src;document.getElementById("lightbox-caption").textContent=photos[idx].label;document.getElementById("lightbox-counter").textContent=(idx+1)+" / "+photos.length;document.getElementById("lightbox").classList.add("open");document.body.style.overflow="hidden";}
+function closeLightbox(){document.getElementById("lightbox").classList.remove("open");document.body.style.overflow="";}
+function closeLightboxBg(e){if(e.target===document.getElementById("lightbox"))closeLightbox();}
+function lightboxNav(dir){current=(current+dir+photos.length)%photos.length;document.getElementById("lightbox-img").src=photos[current].src;document.getElementById("lightbox-caption").textContent=photos[current].label;document.getElementById("lightbox-counter").textContent=(current+1)+" / "+photos.length;}
+document.addEventListener("keydown",e=>{if(!document.getElementById("lightbox").classList.contains("open"))return;if(e.key==="ArrowLeft")lightboxNav(-1);if(e.key==="ArrowRight")lightboxNav(1);if(e.key==="Escape")closeLightbox();});
+</script>
+<script>
+// URL de la propiedad en el formulario de mail
+document.getElementById('url-propiedad').value = window.location.href;
+
+// WhatsApp: mensaje dinámico con URL de la propiedad
+document.getElementById('wa-btn').href =
+  'https://wa.me/5493512196006?text=' +
+  encodeURIComponent('Hola! Quisiera obtener más información de esta propiedad: ' + window.location.href);
+
+// Formulario de consulta con Web3Forms
+document.getElementById('consulta-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('consulta-btn');
+  const msg = document.getElementById('consulta-msg');
+  msg.style.display = 'none';
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'Enviando...';
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', { method:'POST', body: new FormData(this) });
+    const data = await res.json();
+    msg.style.display = 'block';
+    if (data.success) {
+      msg.style.background = 'rgba(37,211,102,0.1)'; msg.style.borderColor = '#25D366'; msg.style.color = '#1a7a3e';
+      msg.textContent = '¡Consulta enviada! Te contactamos a la brevedad.';
+      this.reset();
+    } else {
+      msg.style.background = 'rgba(220,53,69,0.08)'; msg.style.borderColor = '#dc3545'; msg.style.color = '#dc3545';
+      msg.textContent = 'Hubo un error. Por favor intentá por WhatsApp.';
+    }
+  } catch(err) {
+    msg.style.display = 'block'; msg.style.background = 'rgba(220,53,69,0.08)'; msg.style.borderColor = '#dc3545'; msg.style.color = '#dc3545';
+    msg.textContent = 'Error de conexión. Por favor intentá por WhatsApp.';
+  }
+  btn.disabled = false;
+  btn.querySelector('span').textContent = 'Enviar consulta';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propiedades — MNC Inmuebles</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --blue:        #5BB8E8;
+    --blue-dark:   #2B7FC4;
+    --blue-deep:   #1A5490;
+    --bg-dark:     #2C3E52;
+    --bg-light:    #F4F7FA;
+    --bg-white:    #FFFFFF;
+    --text-dark:   #1A2535;
+    --text-gray:   #556070;
+    --text-muted:  #9BB0C8;
+    --border:      #B8CCDF;
+    --border-light:#D4DCE8;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Barlow', sans-serif; background: var(--bg-light); color: var(--text-dark); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    background: var(--bg-dark);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 60px; height: 68px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+  }
+  .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .nav-logo-text {
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:900; line-height:1;
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .nav-logo-text .logo-mnc { font-size:24px; color:var(--text-muted); text-transform:uppercase; letter-spacing:2px; }
+  .nav-logo-text .logo-sub { font-size:11px; color:var(--text-muted); font-weight:600; letter-spacing:3px; }
+  .nav-links { display:flex; align-items:center; gap:6px; list-style:none; }
+  .nav-links a {
+    font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+    color: var(--text-muted); text-decoration:none; padding:8px 14px; border-radius:3px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .nav-links a:hover { color: var(--blue); background: rgba(91,184,232,0.08); }
+  .nav-links a.active { color: var(--blue); }
+  .nav-cta {
+    background: #2B7FC4 !important; color: #fff !important;
+    padding: 8px 20px !important; border-radius:3px; font-weight:700 !important;
+  }
+  .nav-cta:hover { background: var(--blue) !important; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: var(--bg-dark);
+    image-rendering: high-quality;
+    padding: 100px 60px 40px;
+    position: relative; overflow: hidden;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(28, 43, 58, 0.72);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .page-header-inner { position: relative; z-index: 1; }
+  .page-header::before {
+    content:''; position:absolute; inset:0;
+    background-image: linear-gradient(rgba(91,184,232,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(91,184,232,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .page-header-inner { max-width:1280px; margin:0 auto; position:relative; z-index:2; }
+  .page-tag {
+    font-size:11px; font-weight:700; letter-spacing:4px; text-transform:uppercase;
+    color: var(--blue); margin-bottom:8px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .page-tag::before { content:''; width:18px; height:2px; background:var(--blue); display:block; }
+  .page-title {
+    font-family:'Barlow Condensed',sans-serif; font-size:52px; font-weight:900;
+    text-transform:uppercase; color:#FFFFFF; letter-spacing:-1px; line-height:1;
+  }
+  .page-sub { font-size:15px; color:var(--text-muted); margin-top:8px; }
+
+  /* ── MAIN LAYOUT ── */
+  .main-layout {
+    max-width:1280px; margin:0 auto;
+    padding: 36px 60px 80px;
+    display: flex; gap: 32px; align-items: flex-start;
+  }
+
+  /* ── FILTERS SIDEBAR ── */
+  .filters-sidebar {
+    width: 280px; flex-shrink:0;
+    position: sticky; top: 88px;
+  }
+  .filters-card {
+    background: var(--bg-white);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .filters-header {
+    background: var(--bg-dark);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .filters-header span {
+    font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:900;
+    color:#fff; text-transform:uppercase; letter-spacing:1px;
+  }
+  .filters-reset {
+    font-size:11px; font-weight:600; color: var(--blue);
+    background:none; border:none; cursor:pointer; letter-spacing:1px;
+    text-transform:uppercase;
+    transition: color 0.2s;
+  }
+  .filters-reset:hover { color: var(--blue-dark); }
+
+  .filters-body { padding: 20px; display:flex; flex-direction:column; gap:18px; }
+
+  .filter-group { display:flex; flex-direction:column; gap:6px; }
+  .filter-label {
+    font-size:10px; font-weight:700; letter-spacing:2px;
+    text-transform:uppercase; color: var(--blue-dark);
+  }
+  .filter-group select,
+  .filter-group input {
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    border-radius: 5px; padding: 9px 12px;
+    font-family:'Barlow',sans-serif; font-size:13px; color:var(--text-dark);
+    outline:none; transition: border-color 0.2s, box-shadow 0.2s;
+    width:100%;
+  }
+  .filter-group select:focus,
+  .filter-group input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(91,184,232,0.15);
+  }
+
+  .price-range { display:flex; gap:8px; }
+  .price-range input { flex:1; }
+
+  .filter-btn {
+    width:100%; background: #2B7FC4; color:#fff;
+    border:none; border-radius:5px; padding:12px;
+    font-family:'Barlow',sans-serif; font-size:12px; font-weight:700;
+    letter-spacing:2px; text-transform:uppercase; cursor:pointer;
+    transition: background 0.2s, transform 0.15s;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .filter-btn:hover { background: var(--blue); transform:translateY(-1px); }
+
+  .results-count {
+    font-size:12px; color: var(--text-muted);
+    text-align:center; padding: 10px 0 4px;
+    font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  }
+
+  /* ── PROPERTIES GRID ── */
+  .props-section { flex:1; min-width:0; }
+
+  .props-toolbar {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:20px;
+  }
+  .props-found {
+    font-size:14px; color:var(--text-gray); font-weight:600;
+  }
+  .props-found span { color: var(--blue-dark); font-weight:900; }
+
+  .sort-select {
+    background: var(--bg-white); border:1px solid var(--border);
+    border-radius:5px; padding:8px 12px;
+    font-family:'Barlow',sans-serif; font-size:13px; color:var(--text-dark);
+    outline:none; cursor:pointer;
+  }
+
+  .props-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px;
+  }
+
+  /* ── PROPERTY CARD ── */
+  .prop-card {
+    background: var(--bg-white);
+    border-radius:8px; overflow:hidden;
+    border: 2px solid var(--border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+    cursor:pointer;
+  }
+  .prop-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 36px rgba(43,127,196,0.15);
+    border-color: var(--blue);
+  }
+  .prop-img {
+    height:190px; background: var(--bg-dark);
+    position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .prop-img svg { opacity:0.45; }
+  .prop-badges {
+    position:absolute; top:12px; left:12px;
+    display:flex; gap:6px;
+  }
+  .badge {
+    background: #2B7FC4; color:#fff;
+    font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+    padding:4px 10px; border-radius:2px;
+  }
+  .badge-tipo { background: rgba(0,0,0,0.55); }
+
+  .prop-body { padding:18px; }
+  .prop-price {
+    font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:900;
+    color: #2B7FC4; margin-bottom:3px;
+  }
+  .prop-price span { font-size:13px; color:var(--text-gray); font-family:'Barlow',sans-serif; font-weight:600; }
+  .prop-title { font-size:14px; font-weight:700; color:var(--text-dark); margin-bottom:4px; }
+  .prop-location {
+    font-size:12px; color:var(--text-gray);
+    display:flex; align-items:center; gap:4px; margin-bottom:12px;
+  }
+  .prop-features {
+    display:flex; gap:14px; padding-top:12px;
+    border-top:1px solid var(--border-light);
+  }
+  .prop-feat {
+    font-size:12px; font-weight:600; color:var(--text-gray);
+    display:flex; align-items:center; gap:4px;
+  }
+
+  /* ── NO RESULTS ── */
+  .no-results {
+    grid-column: 1/-1;
+    text-align:center; padding:60px 20px;
+    display:none;
+  }
+  .no-results.visible { display:block; }
+  .no-results h3 {
+    font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:900;
+    text-transform:uppercase; color:var(--text-dark); margin-bottom:8px;
+  }
+  .no-results p { font-size:14px; color:var(--text-gray); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg-dark);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 32px 60px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .footer-copy { font-size:12px; color:var(--text-muted); }
+  .footer-mat { font-size:12px; color:rgba(255,255,255,0.55); font-style:italic; }
+
+  @media(max-width:900px) {
+    nav { padding:0 20px; }
+    .nav-links { display:none; }
+    .page-header { padding:90px 20px 30px; }
+    .main-layout { flex-direction:column; padding:24px 20px 60px; }
+    .filters-sidebar { width:100%; position:static; }
+    footer { flex-direction:column; gap:12px; text-align:center; padding:24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="mnc_web.html" class="nav-logo">
+    <svg viewBox="0 0 80 76" width="46" fill="none">
+      <polyline points="6,43 40,7 74,43" stroke="#5BB8E8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <polyline points="18,51 40,30 62,51" stroke="#2B7FC4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <polyline points="18,51 18,68 62,68 62,51" stroke="#2B7FC4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div class="nav-logo-text"><span class="logo-mnc">MNC</span><span class="logo-sub">Inmuebles</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="mnc_web.html#inicio">Inicio</a></li>
+    <li><a href="propiedades.html" class="active">Propiedades</a></li>
+    <li><a href="mnc_web.html#servicios">Servicios</a></li>
+    <li><a href="mnc_web.html#nosotros">Nosotros</a></li>
+    <li><a href="mnc_web.html#contacto" class="nav-cta">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-tag">Catálogo completo</div>
+    <h1 class="page-title">Propiedades<br>disponibles</h1>
+    <p class="page-sub">Encontrá tu próximo hogar entre todas nuestras opciones.</p>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-layout">
+
+  <!-- FILTERS -->
+  <aside class="filters-sidebar">
+    <div class="filters-card">
+      <div class="filters-header">
+        <span>Filtros</span>
+        <button class="filters-reset" onclick="resetFilters()">Limpiar</button>
+      </div>
+      <div class="filters-body">
+
+        <div class="filter-group">
+          <div class="filter-label">Operación</div>
+          <select id="f-operacion">
+            <option value="">Todas</option>
+            <option value="venta">Venta</option>
+            <option value="alquiler">Alquiler</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Tipo de propiedad</div>
+          <select id="f-tipo">
+            <option value="">Todos</option>
+            <option value="casa">Casas</option>
+            <option value="departamento">Departamentos</option>
+            <option value="local">Locales</option>
+            <option value="oficina">Oficinas</option>
+            <option value="terreno">Terrenos y lotes</option>
+            <option value="galpon">Galpones</option>
+            <option value="cochera">Cocheras</option>
+            <option value="emprendimiento">Emprendimientos</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Zona / Barrio</div>
+          <input type="text" id="f-zona" placeholder="Ej: Cerro de Las Rosas…">
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Dormitorios mín.</div>
+          <select id="f-dorm">
+            <option value="">Sin filtro</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+          </select>
+        </div>
+
+        <button class="filter-btn" onclick="applyFilters()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Aplicar filtros
+        </button>
+
+        <div class="results-count" id="results-count">Mostrando todas las propiedades</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- PROPERTIES -->
+  <section class="props-section">
+    <div class="props-toolbar">
+      <div class="props-found"><span id="count-num">9</span> propiedades encontradas</div>
+      <select class="sort-select" onchange="sortProperties(this.value)">
+        <option value="default">Ordenar por</option>
+        <option value="precio-asc">Precio: menor a mayor</option>
+        <option value="precio-desc">Precio: mayor a menor</option>
+        <option value="default">Relevancia</option>
+      </select>
+    </div>
+
+    <div class="props-grid" id="props-grid">
+
+      <!-- PROP 1 -->
+      <div class="prop-card" data-operacion="venta" data-tipo="casa" data-zona="country las delicias" data-precio="185000" data-dorm="3" data-metros="180" onclick="window.location='propiedad_delicias1.html'" style="cursor:pointer;">
+        <div class="prop-img">
+          <div class="prop-badges">
+            <span class="badge">Venta</span>
+            <span class="badge badge-tipo">Casa</span>
+          </div>
+          <img src="img/thumbs/thumb1.jpeg" alt="Casa en Country Las Delicias" style="width:100%;height:100%;object-fit:cover;object-position:center 52%;"/>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">USD 650.000</div>
+          <div class="prop-title">Casa en Country Las Delicias</div>
+          <div class="prop-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Country Las Delicias, Córdoba
+          </div>
+          <div class="prop-features">
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>180 m²</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>3 dorm.</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M4 12h16M4 12a2 2 0 0 1-2-2V6h20v4a2 2 0 0 1-2 2M6 12v6M18 12v6"/></svg>2 baños</div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #D4DCE8;">
+            <span style="font-size:12px;font-weight:700;color:#2B7FC4;letter-spacing:1px;text-transform:uppercase;">Ver propiedad →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROP 3 -->
+      <div class="prop-card" data-operacion="venta" data-tipo="casa" data-zona="terrazas valle escondido" data-precio="320000" data-dorm="4" data-metros="280" onclick="window.location='propiedad_terrazas1.html'" style="cursor:pointer;">
+        <div class="prop-img">
+          <div class="prop-badges">
+            <span class="badge">Venta</span>
+            <span class="badge badge-tipo">Casa</span>
+          </div>
+          <img src="img/thumbs/thumb2.jpeg" alt="Casa en Terrazas Valle Escondido" style="width:100%;height:100%;object-fit:cover;object-position:center 40%;"/>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">USD 350.000</div>
+          <div class="prop-title">Casa en Terrazas Valle Escondido</div>
+          <div class="prop-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Terrazas Valle Escondido, Córdoba
+          </div>
+          <div class="prop-features">
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>280 m²</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>4 dorm.</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M4 12h16M4 12a2 2 0 0 1-2-2V6h20v4a2 2 0 0 1-2 2M6 12v6M18 12v6"/></svg>3 baños</div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #D4DCE8;">
+            <span style="font-size:12px;font-weight:700;color:#2B7FC4;letter-spacing:1px;text-transform:uppercase;">Ver propiedad →</span>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- PROP 5 — Terreno Tierra Alta -->
+      <div class="prop-card" data-operacion="venta" data-tipo="terreno" data-zona="tierra alta" data-precio="0" data-dorm="0" onclick="window.location='propiedad_tierralta.html'" style="cursor:pointer;">
+        <div class="prop-img">
+          <div class="prop-badges">
+            <span class="badge">Venta</span>
+            <span class="badge badge-tipo">Terreno</span>
+          </div>
+          <svg width="110" height="95" viewBox="0 0 120 100" fill="none" stroke="#5BB8E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="10" y="30" width="100" height="55" rx="3"/>
+            <polyline points="10,55 40,40 65,52 90,35 110,45"/>
+            <line x1="10" y1="70" x2="110" y2="70"/>
+          </svg>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">Consultar precio</div>
+          <div class="prop-title">Terreno en Tierra Alta</div>
+          <div class="prop-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Tierra Alta, Córdoba
+          </div>
+          <div class="prop-features">
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>— m² lote</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Barrio cerrado</div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #D4DCE8;">
+            <span style="font-size:12px;font-weight:700;color:#2B7FC4;letter-spacing:1px;text-transform:uppercase;">Ver propiedad →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROP 6 — Depto Av. Maipú Venta -->
+      <div class="prop-card" data-operacion="venta" data-tipo="departamento" data-zona="avenida maipu" data-precio="0" data-dorm="0" onclick="window.location='propiedad_maipuventa.html'" style="cursor:pointer;">
+        <div class="prop-img">
+          <div class="prop-badges">
+            <span class="badge">Venta</span>
+            <span class="badge badge-tipo">Departamento</span>
+          </div>
+          <svg width="110" height="95" viewBox="0 0 120 100" fill="none" stroke="#5BB8E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="20" y="15" width="80" height="70" rx="3"/>
+            <rect x="30" y="25" width="20" height="16" rx="1"/><rect x="70" y="25" width="20" height="16" rx="1"/>
+            <rect x="30" y="50" width="20" height="16" rx="1"/><rect x="70" y="50" width="20" height="16" rx="1"/>
+            <rect x="47" y="70" width="26" height="15" rx="1"/>
+            <line x1="20" y1="42" x2="100" y2="42"/>
+          </svg>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">Consultar precio</div>
+          <div class="prop-title">Departamento en Av. Maipú</div>
+          <div class="prop-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Av. Maipú, Córdoba
+          </div>
+          <div class="prop-features">
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>— m²</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>— dorm.</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M4 12h16M4 12a2 2 0 0 1-2-2V6h20v4a2 2 0 0 1-2 2M6 12v6M18 12v6"/></svg>— baños</div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #D4DCE8;">
+            <span style="font-size:12px;font-weight:700;color:#2B7FC4;letter-spacing:1px;text-transform:uppercase;">Ver propiedad →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROP 8 — Segunda Las Delicias -->
+      <div class="prop-card" data-operacion="venta" data-tipo="casa" data-zona="country las delicias" data-precio="560000" data-dorm="4" data-metros="390" onclick="window.location='propiedad_delicias2.html'" style="cursor:pointer;">
+        <div class="prop-img">
+          <div class="prop-badges">
+            <span class="badge">Venta</span>
+            <span class="badge badge-tipo">Casa</span>
+          </div>
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#2C3E52;">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9BB0C8" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#9BB0C8;letter-spacing:2px;text-transform:uppercase;">Fotos próximamente</span>
+          </div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">USD 560.000</div>
+          <div class="prop-title">Casa en Country Las Delicias</div>
+          <div class="prop-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Country Las Delicias, Córdoba
+          </div>
+          <div class="prop-features">
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>390 m²</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>4 dorm.</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M4 12h16M4 12a2 2 0 0 1-2-2V6h20v4a2 2 0 0 1-2 2M6 12v6M18 12v6"/></svg>3 baños</div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #D4DCE8;">
+            <span style="font-size:12px;font-weight:700;color:#2B7FC4;letter-spacing:1px;text-transform:uppercase;">Ver propiedad →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROP 10 — Villa Belgrano -->
+      <div class="prop-card" data-operacion="venta" data-tipo="casa" data-zona="villa belgrano" data-precio="350000" data-dorm="4" data-metros="500" onclick="window.location='propiedad_villa-belgrano.html'" style="cursor:pointer;">
+        <div class="prop-img">
+          <div class="prop-badges">
+            <span class="badge">Venta</span>
+            <span class="badge badge-tipo">Casa</span>
+          </div>
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#2C3E52;">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9BB0C8" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#9BB0C8;letter-spacing:2px;text-transform:uppercase;">Fotos próximamente</span>
+          </div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">USD 350.000</div>
+          <div class="prop-title">Casa en Villa Belgrano</div>
+          <div class="prop-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Villa Belgrano, Córdoba
+          </div>
+          <div class="prop-features">
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>500 m²</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>4 dorm.</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M4 12h16M4 12a2 2 0 0 1-2-2V6h20v4a2 2 0 0 1-2 2M6 12v6M18 12v6"/></svg>2 baños</div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #D4DCE8;">
+            <span style="font-size:12px;font-weight:700;color:#2B7FC4;letter-spacing:1px;text-transform:uppercase;">Ver propiedad →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROP 9 — Segunda Terrazas Valle Escondido -->
+      <div class="prop-card" data-operacion="venta" data-tipo="casa" data-zona="terrazas valle escondido" data-precio="280000" data-dorm="3" data-metros="0" onclick="window.location='propiedad_terrazas2.html'" style="cursor:pointer;">
+        <div class="prop-img">
+          <div class="prop-badges">
+            <span class="badge">Venta</span>
+            <span class="badge badge-tipo">Casa</span>
+          </div>
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#2C3E52;">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9BB0C8" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#9BB0C8;letter-spacing:2px;text-transform:uppercase;">Fotos próximamente</span>
+          </div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">USD 280.000</div>
+          <div class="prop-title">Casa en Terrazas Valle Escondido</div>
+          <div class="prop-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Terrazas Valle Escondido, Córdoba
+          </div>
+          <div class="prop-features">
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>— m²</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>3 dorm.</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M4 12h16M4 12a2 2 0 0 1-2-2V6h20v4a2 2 0 0 1-2 2M6 12v6M18 12v6"/></svg>2 baños</div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #D4DCE8;">
+            <span style="font-size:12px;font-weight:700;color:#2B7FC4;letter-spacing:1px;text-transform:uppercase;">Ver propiedad →</span>
+          </div>
+        </div>
+      </div>
+      <!-- PROP 7 — Depto Av. Maipú Alquiler -->
+      <div class="prop-card" data-operacion="alquiler" data-tipo="departamento" data-zona="avenida maipu" data-precio="0" data-dorm="0" onclick="window.location='propiedad_maipualquiler.html'" style="cursor:pointer;">
+        <div class="prop-img">
+          <div class="prop-badges">
+            <span class="badge">Alquiler</span>
+            <span class="badge badge-tipo">Departamento</span>
+          </div>
+          <svg width="110" height="95" viewBox="0 0 120 100" fill="none" stroke="#5BB8E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="20" y="15" width="80" height="70" rx="3"/>
+            <rect x="30" y="25" width="20" height="16" rx="1"/><rect x="70" y="25" width="20" height="16" rx="1"/>
+            <rect x="30" y="50" width="20" height="16" rx="1"/><rect x="70" y="50" width="20" height="16" rx="1"/>
+            <rect x="47" y="70" width="26" height="15" rx="1"/>
+            <line x1="20" y1="42" x2="100" y2="42"/>
+          </svg>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">Consultar precio</div>
+          <div class="prop-title">Departamento en Av. Maipú</div>
+          <div class="prop-location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Av. Maipú, Córdoba
+          </div>
+          <div class="prop-features">
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>— m²</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>— dorm.</div>
+            <div class="prop-feat"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5BB8E8" stroke-width="2"><path d="M4 12h16M4 12a2 2 0 0 1-2-2V6h20v4a2 2 0 0 1-2 2M6 12v6M18 12v6"/></svg>— baños</div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #D4DCE8;">
+            <span style="font-size:12px;font-weight:700;color:#2B7FC4;letter-spacing:1px;text-transform:uppercase;">Ver propiedad →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- No results -->
+      <div class="no-results" id="no-results">
+        <h3>Sin resultados</h3>
+        <p>No hay propiedades que coincidan con los filtros aplicados.<br>Probá con otros criterios de búsqueda.</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <a href="mnc_web.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <svg viewBox="0 0 80 76" width="38" fill="none">
+      <polyline points="6,43 40,7 74,43" stroke="#5BB8E8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <polyline points="18,51 40,30 62,51" stroke="#2B7FC4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <polyline points="18,51 18,68 62,68 62,51" stroke="#2B7FC4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div style="display:flex;flex-direction:column;gap:2px;line-height:1;"><span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;">MNC</span><span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:2px;">Inmuebles</span></div>
+  </a>
+  <div class="footer-copy">© 2026 MNC Inmuebles · Todos los derechos reservados</div>
+  <div class="footer-mat">María Amelia San Pedro · CPI 7291</div>
+</footer>
+
+<script>
+  // ── Read URL params (from search bar on homepage) ──
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('operacion')) document.getElementById('f-operacion').value = params.get('operacion').toLowerCase();
+  if (params.get('tipo'))      document.getElementById('f-tipo').value      = params.get('tipo').toLowerCase();
+  if (params.get('zona'))      document.getElementById('f-zona').value      = params.get('zona');
+
+  // ── Filter logic ──
+  function applyFilters() {
+    const op    = document.getElementById('f-operacion').value.toLowerCase();
+    const tipo  = document.getElementById('f-tipo').value.toLowerCase();
+    const zona  = document.getElementById('f-zona').value.toLowerCase().trim();
+    const dorm  = parseInt(document.getElementById('f-dorm').value) || 0;
+
+    const cards = document.querySelectorAll('.prop-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const cOp    = card.dataset.operacion;
+      const cTipo  = card.dataset.tipo;
+      const cZona  = card.dataset.zona;
+      const cDorm  = parseInt(card.dataset.dorm);
+
+      const matchOp   = !op   || cOp === op;
+      const matchTipo = !tipo || cTipo === tipo;
+      const matchZona = !zona || cZona.includes(zona);
+      const matchDorm = !dorm || cDorm >= dorm;
+
+      const show = matchOp && matchTipo && matchZona && matchDorm;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    document.getElementById('count-num').textContent = visible;
+    document.getElementById('results-count').textContent =
+      visible === 0 ? 'Sin resultados' : `${visible} propiedad${visible !== 1 ? 'es' : ''} encontrada${visible !== 1 ? 's' : ''}`;
+    document.getElementById('no-results').classList.toggle('visible', visible === 0);
+  }
+
+  function resetFilters() {
+    document.getElementById('f-operacion').value = '';
+    document.getElementById('f-tipo').value = '';
+    document.getElementById('f-zona').value = '';
+    document.getElementById('f-dorm').value = '';
+    applyFilters();
+  }
+
+  function sortProperties(val) {
+    const grid = document.getElementById('props-grid');
+    const cards = [...grid.querySelectorAll('.prop-card')];
+    cards.sort((a, b) => {
+      const pA = parseFloat(a.dataset.precio);
+      const pB = parseFloat(b.dataset.precio);
+      if (val === 'precio-asc')  return pA - pB;
+      if (val === 'precio-desc') return pB - pA;
+      return 0;
+    });
+    cards.forEach(c => grid.insertBefore(c, document.getElementById('no-results')));
+  }
+
+  // Apply filters on load (from URL params)
+  applyFilters();
+</script>
+</body>
+</html>
