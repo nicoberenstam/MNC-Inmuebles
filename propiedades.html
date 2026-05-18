@@ -650,6 +650,7 @@
   if (params.get('operacion')) document.getElementById('f-operacion').value = params.get('operacion').toLowerCase();
   if (params.get('tipo'))      document.getElementById('f-tipo').value      = params.get('tipo').toLowerCase();
   if (params.get('zona'))      document.getElementById('f-zona').value      = params.get('zona');
+  if (params.get('operacion') || params.get('tipo') || params.get('zona')) applyFilters();
 
   // ── Filter logic ──
   function applyFilters() {

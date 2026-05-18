@@ -792,13 +792,8 @@
         <select id="s-tipo">
           <option value="" disabled selected>Seleccionar</option>
           <option value="casa">Casas</option>
-          <option>Departamentos</option>
-          <option>Locales</option>
-          <option>Oficinas</option>
-          <option>Terrenos y lotes</option>
-          <option>Galpones</option>
-          <option>Cocheras</option>
-          <option>Emprendimientos</option>
+          <option value="departamento">Departamentos</option>
+          <option value="terreno">Terrenos y lotes</option>
         </select>
       </div>
       <div class="search-field" style="border-right:none;">
@@ -1092,6 +1087,18 @@
           </button>
         </form>
         <script>
+        function buscarPropiedades() {
+          const operacion = document.getElementById('s-operacion').value;
+          const tipo      = document.getElementById('s-tipo').value;
+          const zona      = document.getElementById('s-zona').value.trim();
+          const params    = new URLSearchParams();
+          if (operacion) params.set('operacion', operacion);
+          if (tipo)      params.set('tipo', tipo);
+          if (zona)      params.set('zona', zona);
+          const query = params.toString();
+          window.location.href = 'propiedades.html' + (query ? '?' + query : '');
+        }
+
         document.getElementById('contacto-form').addEventListener('submit', async function(e) {
           e.preventDefault();
           const btn = document.getElementById('contacto-btn');
